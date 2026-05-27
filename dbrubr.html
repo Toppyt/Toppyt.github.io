@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DBRUBR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Bitter:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --black: #111; --white: #fff; --off-white: #f5f5f3; --light-gray: #e8e8e4; }
+    body { font-family: 'Bitter', serif; background: var(--white); color: var(--black); overflow-x: hidden; }
+
+    /* HEADER */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1.5rem 4vw;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.3s;
+    }
+    header.scrolled { background: rgba(0,0,0,0.88); backdrop-filter: blur(8px); }
+    .logo img { height: 42px; display: block; }
+    nav a {
+      color: var(--white); text-decoration: none; font-family: 'Bitter', serif;
+      font-size: 0.9rem; letter-spacing: 0.06em; margin-left: 2rem;
+      text-transform: uppercase; opacity: 0.85; transition: opacity 0.2s;
+    }
+    nav a:hover, nav a.active { opacity: 1; font-weight: 700; }
+    .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .burger span { display: block; width: 24px; height: 1px; background: white; transition: all 0.3s; }
+
+    /* HERO */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('SUSHI.jpg');
+      background-size: cover; background-position: 50% 66%;
+    }
+    .hero-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); }
+    .hero-content { position: relative; text-align: center; padding: 0 4vw; color: var(--white); }
+    .hero-content h1 {
+      font-family: 'Shrikhand', cursive;
+      font-size: clamp(2.5rem, 7vw, 6rem);
+      line-height: 1.1; letter-spacing: -0.01em; margin-bottom: 1.5rem;
+    }
+    .hero-content p { font-size: clamp(1rem, 2vw, 1.4rem); font-style: italic; opacity: 0.88; }
+
+    /* MARQUEE */
+    .marquee-section { background: var(--off-white); overflow: hidden; padding: 1.2rem 0; }
+    .marquee-track { display: flex; white-space: nowrap; animation: marquee 14s linear infinite; }
+    .marquee-track span {
+      font-family: 'Shrikhand', cursive;
+      font-size: clamp(3rem, 8vw, 7rem);
+      padding-right: 1.5rem; color: var(--black); letter-spacing: -0.02em;
+    }
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* SPLIT SECTION */
+    .split-section { display: grid; grid-template-columns: 1fr 1fr; min-height: 80vh; }
+    .split-image { overflow: hidden; }
+    .split-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .split-text {
+      padding: 8vw 6vw; display: flex; flex-direction: column;
+      justify-content: center; background: var(--white);
+    }
+    .split-text .eyebrow {
+      font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #999; margin-bottom: 1rem;
+    }
+    .split-text h2 {
+      font-family: 'Shrikhand', cursive;
+      font-size: clamp(1.8rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.2rem;
+    }
+    .split-text p { font-size: 1rem; line-height: 1.7; color: #555; margin-bottom: 2rem; }
+
+    .btn {
+      display: inline-block; padding: 0.75rem 2rem; border-radius: 999px;
+      font-family: 'Bitter', serif; font-size: 0.85rem; letter-spacing: 0.06em;
+      text-transform: uppercase; text-decoration: none; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-primary { background: var(--black); color: var(--white); border: 2px solid var(--black); }
+    .btn-primary:hover { background: transparent; color: var(--black); }
+    .btn-outline { background: transparent; color: var(--black); border: 2px solid var(--black); }
+    .btn-outline:hover { background: var(--black); color: var(--white); }
+
+    /* PARTY SECTION */
+    .party-section {
+      background: var(--off-white); padding: 8vw 6vw;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; align-items: center;
+    }
+    .party-section h2 {
+      font-family: 'Shrikhand', cursive;
+      font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.15; margin-bottom: 1.5rem;
+    }
+    .party-section p { font-size: 1rem; line-height: 1.75; color: #555; margin-bottom: 2rem; }
+    .party-deco {
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Shrikhand', cursive; font-size: 9rem; line-height: 1;
+      opacity: 0.08; user-select: none;
+    }
+
+    /* MEMBERS HEADER */
+    .members-header { padding: 4rem 4vw 2rem; text-align: center; }
+    .members-header p {
+      font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+      font-weight: 700; color: #666;
+    }
+
+    /* GALLERY */
+    .gallery-section { background: var(--white); padding: 0 4vw 6vw; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+    .gallery-item {
+      aspect-ratio: 3/4; overflow: hidden; cursor: pointer;
+      background: var(--light-gray);
+    }
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.5s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.05); }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.93); align-items: center; justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+    .lightbox-close {
+      position: absolute; top: 1.5rem; right: 2rem;
+      color: white; font-size: 2rem; cursor: pointer;
+      background: none; border: none; line-height: 1;
+    }
+    .lightbox-prev, .lightbox-next {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: white; font-size: 3rem;
+      cursor: pointer; padding: 1rem; opacity: 0.6; transition: opacity 0.2s;
+    }
+    .lightbox-prev:hover, .lightbox-next:hover { opacity: 1; }
+    .lightbox-prev { left: 1rem; }
+    .lightbox-next { right: 1rem; }
+
+    /* FOOTER */
+    footer {
+      background: var(--light-gray); padding: 5rem 4vw;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;
+    }
+    .footer-left h3 { font-family: 'Shrikhand', cursive; font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .footer-left p { font-size: 0.9rem; color: #666; }
+    .footer-left a { color: inherit; }
+    .footer-right { text-align: right; }
+    .footer-right h3 { font-family: 'Shrikhand', cursive; font-size: 2rem; }
+
+    /* MOBILE */
+    @media (max-width: 767px) {
+      .split-section { grid-template-columns: 1fr; }
+      .split-image { aspect-ratio: 4/3; }
+      .party-section { grid-template-columns: 1fr; }
+      .party-deco { display: none; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+      footer { grid-template-columns: 1fr; text-align: center; }
+      .footer-right { text-align: center; }
+      .burger { display: flex; }
+      nav { display: none; }
+      nav.open {
+        display: flex; flex-direction: column; position: fixed; inset: 0;
+        background: black; align-items: center; justify-content: center; gap: 2.5rem; z-index: 200;
+      }
+      nav.open a { font-size: 1.5rem; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<header id="site-header">
+  <div class="logo">
+    <a href="#"><img src="WhiteSmall.png" alt="DBRUBR"></a>
+  </div>
+  <nav id="main-nav">
+    <a href="#" class="active">Home</a>
+    <a href="#">About</a>
+  </nav>
+  <div class="burger" id="burger" onclick="toggleNav()">
+    <span></span><span></span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>Divided by race,<br>United by racism.</h1>
+    <p>Racisme er en menneskerettighed</p>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<section class="marquee-section">
+  <div class="marquee-track" id="marquee-track"></div>
+</section>
+
+<!-- SPLIT: Image + Booking -->
+<section class="split-section">
+  <div class="split-image">
+    <img src="epstein.png" alt="">
+  </div>
+  <div class="split-text">
+    <span class="eyebrow">Keder du dig?</span>
+    <h2>Rammer kedsomheden dig?</h2>
+    <p>HUSK AT DU KAN BOOKE EN BULOW PÅ BOOKENBULOW.DK</p>
+    <a href="https://Bookenbulow.dk" class="btn btn-primary" target="_blank">Learn more</a>
+  </div>
+</section>
+
+<!-- PARTY -->
+<section class="party-section">
+  <div>
+    <h2>Et parti bygget på samfundsstyrke og massere af racisme</h2>
+    <p>Vi her hos DBRUBR står for vores sammenhold trods alle vores forskelle. Men i stedet for at se bort fra vores forskelle og behandle alle lige lidt, gør vi det lidt anderledes. Det er selvfølgelig de sorte og de grimme, der bliver smidt under bussen.</p>
+    <a href="#" class="btn btn-primary">Lær om vores medlemmer</a>
+  </div>
+  <div class="party-deco">DBR</div>
+</section>
+
+<!-- MEMBERS LABEL -->
+<div class="members-header">
+  <p>Mød medlemmerne</p>
+</div>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+  <div class="gallery-grid" id="gallery"></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <h3>DBR4L ❤️</h3>
+    <p>SPONSERED BY: <a href="http://BOOKENBULOW.DK">BOOKENBULOW.DK</a></p>
+  </div>
+  <div class="footer-right">
+    <h3>mc.dbrubr.dk</h3>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-prev" onclick="lightboxNav(-1)">‹</button>
+  <img id="lightbox-img" src="" alt="">
+  <button class="lightbox-next" onclick="lightboxNav(1)">›</button>
+</div>
+
+<script>
+  // Scroll header
+  window.addEventListener('scroll', () => {
+    document.getElementById('site-header').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Mobile nav
+  function toggleNav() {
+    document.getElementById('main-nav').classList.toggle('open');
+  }
+
+  // Marquee
+  const track = document.getElementById('marquee-track');
+  const text = 'NIGGGGGGGGGGGGGGGGGGGGGGGGGGGER\u00A0\u00A0\u00A0';
+  for (let i = 0; i < 12; i++) {
+    const s = document.createElement('span');
+    s.textContent = text;
+    track.appendChild(s);
+  }
+
+  // Gallery
+  const images = [
+    '67man.jpg','Casper.png','epstein.png','GREYMAN.jpg',
+    'lilmans.jpg','nothuman.jpg','PNC.png','SEB.jpg',
+    'shaolin.jpg','Simon.jpg','TH.png','xuehuapiaopiao.jpg'
+  ];
+  const gallery = document.getElementById('gallery');
+  images.forEach((src, i) => {
+    const div = document.createElement('div');
+    div.className = 'gallery-item';
+    div.innerHTML = `<img src="${src}" loading="lazy" alt="">`;
+    div.addEventListener('click', () => openLightbox(i));
+    gallery.appendChild(div);
+  });
+
+  // Lightbox
+  let cur = 0;
+  function openLightbox(i) {
+    cur = i;
+    document.getElementById('lightbox-img').src = images[i];
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function lightboxNav(d) {
+    cur = (cur + d + images.length) % images.length;
+    document.getElementById('lightbox-img').src = images[cur];
+  }
+  document.getElementById('lightbox').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeLightbox();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lightboxNav(-1);
+    if (e.key === 'ArrowRight') lightboxNav(1);
+  });
+</script>
+</body>
+</html>
